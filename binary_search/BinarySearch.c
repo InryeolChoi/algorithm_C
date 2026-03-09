@@ -45,7 +45,9 @@ int main(void)
     
     qsort( (void *)Dataset, length, sizeof(Point), comparePoint );
 
-    found = BinarySearch(Dataset, length, 671.8);
-    printf("found!\n");
-    printf("ID: %d, Point: %s \n", found->id, found->point);
+    found = BinarySearch(Dataset, length, 671.78);
+    if (found == NULL)
+        printf("not found");
+    else
+        printf("found!\nID: %d, Point: %f \n", found->id, found->point);
 }

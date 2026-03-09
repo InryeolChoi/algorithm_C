@@ -8,4 +8,5 @@ Point Dataset[] = {
     (Point){2, 176.23},
     (Point){3, 365.92},
     (Point){4, 162.44},
+    (Point){5, 671.78}
 };
