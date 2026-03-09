@@ -82,28 +82,44 @@ BSTNode     *removeNode(BSTNode *tree, BSTNode *parent, ElementType target)
     else if (tree->data < target)
         removed = removeNode(tree->right, tree, target);
     else
+    {
         removed = tree;
-    
-    // 
-    if (tree->left == NULL && tree->right == NULL)
-    {
-        if (parent->left == tree)
-            parent->left = NULL;
-        else
-            parent->right = NULL;
-    }
-    else
-    {
-        if (tree->left != NULL && tree->right != NULL)
+
+        // 자식노드가 전부 없을 때
+        if (tree->left == NULL && tree->right == NULL)
         {
-            BSTNode *minNode = searchMinNode(tree->right);
-            minNode = removeNode(tree, NULL, minNode->data);
-        }   
+            // 부모 노드 끊기
+            if (parent->left == tree)
+                parent->left = NULL;
+            else
+                parent->right = NULL;
+        }
+
+        // 자식노드 있을 때
+        else
+        {
+            if (tree->left != NULL && tree->right != NULL)
+            {
+                BSTNode *minNode = searchMinNode(tree->right);
+                minNode = removeNode(tree, NULL, minNode->data);
+            }
+            else
+            {
+                BSTNode *temp = NULL;
+                if (tree->left == NULL)
+                    temp = tree->left;
+                else
+                    temp = tree->right;
+                
+                if (parent->left == tree)
+                    parent->left = temp;
+                else
+                    parent->right = temp;
+            }
+        }
     }
-
-    // 
-
-
+    
+    return removed;
 }
 
 void        InorderPrintTree(BSTNode *node)
