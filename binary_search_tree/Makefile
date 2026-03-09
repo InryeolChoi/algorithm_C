@@ -1,5 +1,5 @@
 NAME = bs_tree
-SRCS = bs_tree.c test.c
+SRCS = binarySearchTree.c test.c
 OBJS = $(SRCS:.c=.o)
 
 all : $(NAME)

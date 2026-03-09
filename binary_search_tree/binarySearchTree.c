@@ -33,7 +33,7 @@ BSTNode     *searchNode(BSTNode *tree, ElementType target)
     if (tree == NULL)
         return NULL;
     
-    if (tree->data = target)
+    if (tree->data == target)
         return tree;
     else if (tree->data > target)
         return searchNode(tree->left, target);
@@ -98,19 +98,29 @@ BSTNode     *removeNode(BSTNode *tree, BSTNode *parent, ElementType target)
         // 자식노드 있을 때
         else
         {
+            // 자식이 둘 있을 때
             if (tree->left != NULL && tree->right != NULL)
             {
+                // 오른쪽 subtree에서 가장 작은 노드 찾기
                 BSTNode *minNode = searchMinNode(tree->right);
+
+                // 그 노드를 삭제
                 minNode = removeNode(tree, NULL, minNode->data);
+
+                // 삭제할 노드의 data를 그 값으로 교체
+                tree->data = minNode->data;
             }
+            // 자식이 하나만 있을 때
             else
             {
+                // 자식 가지고 오기
                 BSTNode *temp = NULL;
                 if (tree->left == NULL)
-                    temp = tree->left;
+                    temp = tree->right;
                 else
                     temp = tree->right;
                 
+                // 조부모를 자식과 연결
                 if (parent->left == tree)
                     parent->left = temp;
                 else
@@ -124,5 +134,10 @@ BSTNode     *removeNode(BSTNode *tree, BSTNode *parent, ElementType target)
 
 void        InorderPrintTree(BSTNode *node)
 {
-
+    if (node == NULL)
+        return;
+    
+    InorderPrintTree(node->left);
+    printf("%d ", node->data);
+    InorderPrintTree(node->right);
 }
