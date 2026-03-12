@@ -61,29 +61,6 @@ node    *searchMinNode(node *tree)
 }
 
 /* 회전 */
-void    rotateLeft(node **root, node *parent)
-{
-    node *rightchild = parent->right;
-    
-    parent->right = rightchild->left;
-    if (rightchild->left != Nil)
-        rightchild->left->parent = parent;
-    
-    rightchild->parent = parent->parent;
-    if (parent->parent == NULL)
-        (*root) = rightchild;
-    else
-    {
-        if (parent->parent->left == parent)
-            parent->parent->left = rightchild;
-        else
-            parent->parent->right = rightchild;
-    }
-
-    rightchild->left = parent;
-    parent->parent = rightchild;
-}
-
 void    rotateRight(node **root, node *parent)
 {
     node *leftchild = parent->left;
@@ -113,16 +90,42 @@ void    rotateRight(node **root, node *parent)
     parent->parent = leftchild;
 }
 
+void    rotateLeft(node **root, node *parent)
+{
+    node *rightchild = parent->right;
+    
+    parent->right = rightchild->left;
+    if (rightchild->left != Nil)
+        rightchild->left->parent = parent;
+    
+    rightchild->parent = parent->parent;
+    if (parent->parent == NULL)
+        (*root) = rightchild;
+    else
+    {
+        if (parent->parent->left == parent)
+            parent->parent->left = rightchild;
+        else
+            parent->parent->right = rightchild;
+    }
 
+    rightchild->left = parent;
+    parent->parent = rightchild;
+}
 
+/* 삽입 */
+// 삽입의 메인
 void    insertNode(node **tree, node *newnode)
 {
+    // 노드 삽입
     insertNodeHelper(tree, newnode);
     
+    // 새 노드를 빨간색으로, 왼/오른쪽을 Nil로
     newnode->color = RED;
     newnode->left = Nil;
     newnode->right = Nil;
 
+    // 규칙 잡기
     rebuildAfterInsert(tree, newnode);
 }
 
