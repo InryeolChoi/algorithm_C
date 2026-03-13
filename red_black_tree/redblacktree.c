@@ -156,11 +156,43 @@ void    insertNodeHelper(node **tree, node *newnode)
     }
 }
 
-void    rebuildAfterInsert(node **tree, node *newnode)
+void    rebuildAfterInsert(node **root, node *X)
 {
+    while (X != (*root) && X->parent->color)
+    {
+        // 
+        if (X->parent == X->parent->parent->left)
+        {
+            node *uncle = X->parent->parent->right;
+            if (uncle->color == RED)
+            {
+                X->parent->color = BLACK;
+                uncle->color = BLACK;
+                X->parent->parent->color = RED;
 
+                X = X->parent->parent;
+            }
+            else
+            {
+                if (X == X->parent->right)
+                {
+                    X = X->parent;
+                    rotateLeft(root, X);
+                }
+                
+                X->parent->color = BLACK;
+                X->parent->parent->color = RED;
+
+                rotateRight(root, X->parent->parent);
+            }
+        }
+        // 
+        else
+        {
+            
+        }
+    }
 }
-
 
 
 void    removeNode(node **root, elementType target);
