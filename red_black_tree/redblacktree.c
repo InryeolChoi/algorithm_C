@@ -160,22 +160,28 @@ void    rebuildAfterInsert(node **root, node *X)
 {
     while (X != (*root) && X->parent->color)
     {
-        // 
+        // 부모가 할아버지의 왼쪽 자식인 경우
         if (X->parent == X->parent->parent->left)
         {
             node *uncle = X->parent->parent->right;
+            
+            // 삼촌이 붉은 색인 경우
             if (uncle->color == RED)
             {
                 X->parent->color = BLACK;
                 uncle->color = BLACK;
                 X->parent->parent->color = RED;
 
+                // 처리 후 기준을 조상으로 올리는 루트 (반복)
                 X = X->parent->parent;
             }
+            // 삼촌이 검은색인 경우
             else
             {
+                // 새 노드가 부모의 우측 아래에 있는 경우
                 if (X == X->parent->right)
                 {
+                    // 기준노드를 부모로 바꾸고 회전
                     X = X->parent;
                     rotateLeft(root, X);
                 }
@@ -186,18 +192,134 @@ void    rebuildAfterInsert(node **root, node *X)
                 rotateRight(root, X->parent->parent);
             }
         }
-        // 
+        // 부모가 할아버지의 오른쪽 자식인 경우
         else
         {
+            node *uncle = X->parent->parent->left;
             
+            if (uncle->color == RED)
+            {
+                X->parent->color = BLACK;
+                uncle->color = BLACK;
+                X->parent->parent->color = RED;
+                
+                // 처리 후 기준을 조상으로 올리는 루트 (반복)
+                X = X->parent->parent;
+            }
+            else
+            {
+                if (X == X->parent->left)
+                {
+                    X = X->parent;
+                    rotateRight(root, X);
+                }
+
+                X->parent->color = BLACK;
+                X->parent->parent->color = RED;
+
+                rotateLeft(root, X->parent->parent);
+            }
+        }
+        // 반복문
+        // X가 루트가 아니고, X의 부모가 색이 있는 경우
+        // RED-RED 문제를 해결할 필요가 있는 경우에만 탐색
+    }
+
+    
+    // root를 블랙으로 고정
+    (*root)->color = BLACK;
+}
+
+void    removeNode(node **root, elementType data)
+{
+    node *removed = NULL;
+    node *successor = NULL;
+    node *target = NULL;
+
+    target = searchNode(*root, data);
+
+    if (target == NULL)
+        return NULL;
+    
+    if (target->left == Nil | target->right == Nil)
+        removed = target;
+    else
+    {
+        removed = searchMinNode(target->right);
+        target->data = removed->data;
+    }
+
+    if (removed->left != Nil)
+        successor = removed->left;
+    else
+        successor = removed->right;
+    
+    successor->parent = removed->parent;
+
+    if (removed->parent == NULL)
+        (*root) = successor;
+    else
+    {
+        if (removed == removed->parent->left)
+            removed->parent->left = successor;
+        else
+            removed->parent->right = successor;
+    }
+
+    if (removed->color == BLACK)
+        rebuildAfterRemove(root, successor);
+    
+    return removed;
+}
+
+void    rebuildAfterRemove(node **root, node *successor)
+{
+    node *sibling = NULL;
+
+    while (successor->parent != NULL && successor->color == BLACK)
+    {
+        if (successor == successor->parent->left)
+        {
+            sibling = successor->parent->right;
+            if (sibling->color == RED)
+            {
+                sibling->color = BLACK;
+                successor->parent->color = RED;
+                rotateLeft(root, successor->parent);
+            }
+            else
+            {
+                if (sibling->left->color == BLACK &&
+                    sibling->right->color == BLACK)
+                {
+                    sibling->color = RED;
+                    successor = successor->parent;
+                }
+                else
+                {
+                    if (sibling->left->color == RED)
+                    {
+                        sibling->left->color = BLACK;
+                        sibling->color = RED;
+
+                        rotateRight(root, sibling);
+                        sibling = successor->parent->right;
+                    }
+
+                    sibling->color = successor->parent->color;
+                    successor->parent->color = BLACK;
+                    sibling->right->color = BLACK;
+                    roatetLeft(root, successor->parent);
+                    successor = (*root);
+                }
+            }
+        }
+        else
+        {
+
         }
     }
 }
-
-
-void    removeNode(node **root, elementType target);
-void    rebuildAfterRemove(node **root, node *x);
-
 
 
 void    printTree(node *node, int depth, int blackcount);

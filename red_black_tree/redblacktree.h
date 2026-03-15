@@ -31,9 +31,9 @@ void    rotateRight(node **root, node *parent);
 // 삽입
 void    insertNode(node **tree, node *newnode);
 void    insertNodeHelper(node **tree, node *newnode);
-void    removeNode(node **root, elementType target);
+void    removeNode(node **root, elementType data);
 void    rebuildAfterInsert(node **root, node *X);
-void    rebuildAfterRemove(node **root, node *x);
+void    rebuildAfterRemove(node **root, node *successor);
 
 // 출력
 void    printTree(node *node, int depth, int blackcount);
