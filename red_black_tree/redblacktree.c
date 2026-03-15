@@ -230,30 +230,36 @@ void    rebuildAfterInsert(node **root, node *X)
     (*root)->color = BLACK;
 }
 
-void    removeNode(node **root, elementType data)
+node    *removeNode(node **root, elementType data)
 {
     node *removed = NULL;
     node *successor = NULL;
     node *target = NULL;
-
+    
+    // 삭제할 노드 찾기
     target = searchNode(*root, data);
 
     if (target == NULL)
         return NULL;
     
-    if (target->left == Nil | target->right == Nil)
+    /* 실제 제거될 노드 결정 */
+    if (target->left == Nil || target->right == Nil)
         removed = target;
     else
     {
+        // successor로 값 교체
         removed = searchMinNode(target->right);
         target->data = removed->data;
     }
 
+    /* successor 찾기 */
+    // successor : removed의 유일한 자식
     if (removed->left != Nil)
         successor = removed->left;
     else
         successor = removed->right;
     
+    /* successor를 removed의 부모와 연결하기 */
     successor->parent = removed->parent;
 
     if (removed->parent == NULL)
@@ -266,6 +272,7 @@ void    removeNode(node **root, elementType data)
             removed->parent->right = successor;
     }
 
+    // RB 조건 검사
     if (removed->color == BLACK)
         rebuildAfterRemove(root, successor);
     
