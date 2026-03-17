@@ -300,25 +300,27 @@ void    rebuildAfterRemove(node **root, node *successor)
     {
         if (successor == successor->parent->left)
         {
-            // 형제를 설정
+            // successor의 형제(sibiling)를 설정
             sibling = successor->parent->right;
 
-            // 형재의 색 == RED
+            // sibiling == RED
             if (sibling->color == RED)
             {
                 sibling->color = BLACK;
                 successor->parent->color = RED;
                 rotateLeft(root, successor->parent);
             }
-            // 형재의 색 == BLACK
+            // sibiling == BLACK
             else
             {
+                // sibiling의 자식들이 모두 BLACK이면, sibling <= RED
                 if (sibling->left->color == BLACK &&
                     sibling->right->color == BLACK)
                 {
                     sibling->color = RED;
                     successor = successor->parent;
                 }
+                // sibiling의 자식들 중 일부가 RED면
                 else
                 {
                     if (sibling->left->color == RED)
