@@ -24,14 +24,14 @@ void    destroynode(node *node)
 void    destroytree(node *tree)
 {
     if (tree->right != Nil)
-        destorytree(tree->right);
+        destroytree(tree->right);
     if (tree->left != Nil)
-        destorytree(tree->left);
+        destroytree(tree->left);
     
     tree->left = Nil;
     tree->right = Nil;
 
-    destoryNode(tree);
+    destroynode(tree);
 }
 
 /* 검색 */
@@ -41,9 +41,9 @@ node    *searchNode(node *tree, elementType target)
         return NULL;
     
     if (tree->data < target)
-        searchNode(tree->left, target);
+        return searchNode(tree->right, target);
     else if (target < tree->data)
-        searchNode(tree->right, target);
+        return searchNode(tree->left, target);
     else
         return tree;
 }
@@ -57,7 +57,7 @@ node    *searchMinNode(node *tree)
     if (tree->left == Nil)
         return tree;
     else
-        searchMinNode(tree->left);
+        return searchMinNode(tree->left);
 }
 
 /* 회전 */
@@ -158,7 +158,7 @@ void    insertNodeHelper(node **tree, node *newnode)
 
 void    rebuildAfterInsert(node **root, node *X)
 {
-    while (X != (*root) && X->parent->color)
+    while (X != (*root) && X->parent->color == RED)
     {
         // 부모가 할아버지의 왼쪽 자식인 경우
         if (X->parent == X->parent->parent->left)
@@ -390,4 +390,31 @@ void    rebuildAfterRemove(node **root, node *successor)
 }
 
 
-void    printTree(node *node, int depth, int blackcount);
+void    printTree(node *node, int depth, int blackcount)
+{
+    int i;
+    int current_blackcount;
+
+    if (node == NULL)
+        return;
+    if (node == Nil)
+    {
+        for (i = 0; i < depth; i++)
+            printf("    ");
+        printf("NIL(B, black=%d)\n", blackcount + 1);
+        return;
+    }
+
+    current_blackcount = blackcount;
+    if (node->color == BLACK)
+        current_blackcount++;
+
+    printTree(node->right, depth + 1, current_blackcount);
+    for (i = 0; i < depth; i++)
+        printf("    ");
+    printf("%d(%c, black=%d)\n",
+        node->data,
+        node->color == RED ? 'R' : 'B',
+        current_blackcount);
+    printTree(node->left, depth + 1, current_blackcount);
+}

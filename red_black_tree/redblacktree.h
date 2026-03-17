@@ -38,4 +38,4 @@ void    rebuildAfterRemove(node **root, node *successor);
 // 출력
 void    printTree(node *node, int depth, int blackcount);
 
-#endif REDBLACKTREE_H
+#endif
