@@ -230,6 +230,8 @@ void    rebuildAfterInsert(node **root, node *X)
     (*root)->color = BLACK;
 }
 
+/* 삭제 */
+// 삭제하기
 node    *removeNode(node **root, elementType data)
 {
     node *removed = NULL;
@@ -264,13 +266,10 @@ node    *removeNode(node **root, elementType data)
 
     if (removed->parent == NULL)
         (*root) = successor;
+    else if (removed == removed->parent->left)
+        removed->parent->left = successor;
     else
-    {
-        if (removed == removed->parent->left)
-            removed->parent->left = successor;
-        else
-            removed->parent->right = successor;
-    }
+        removed->parent->right = successor;
 
     // RB 조건 검사
     if (removed->color == BLACK)
