@@ -365,9 +365,24 @@ void    rebuildAfterRemove(node **root, node *successor)
             }
             else
             {
-                
-            }
+                // case 3: sibling BLACK + far child BLACK + near child RED
+                if (sibling->left->color == BLACK)
+                {
+                    sibling->right->color = BLACK;
+                    sibling->color = RED;
+                    rotateLeft(root, sibling);
 
+                    sibling = successor->parent->left;
+                }
+                // case 4: sibling BLACK + far child RED
+                sibling->color = successor->parent->color;
+                successor->parent->color = BLACK;
+                sibling->left->color = BLACK;
+
+                rotateRight(root, successor->parent);
+
+                successor = (*root);
+            }
         }
     }
     // 🔥 마지막 color 보정
