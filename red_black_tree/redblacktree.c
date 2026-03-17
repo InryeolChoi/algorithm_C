@@ -234,6 +234,10 @@ void    rebuildAfterInsert(node **root, node *X)
 // 삭제하기
 node    *removeNode(node **root, elementType data)
 {
+    // data : 우리가 지우고 싶은 값
+    // target : data가 있는 노드
+    // removed : target 대신 삭제할 노드
+    // successor : removed의 자식
     node *removed = NULL;
     node *successor = NULL;
     node *target = NULL;
@@ -245,21 +249,29 @@ node    *removeNode(node **root, elementType data)
         return NULL;
     
     /* 실제 제거될 노드 결정 */
+    // 삭제할 노드 target이 끝에 있는 경우
     if (target->left == Nil || target->right == Nil)
         removed = target;
+    // 삭제할 노드 target이 끝에 있지 않은 경우
     else
     {
-        // successor로 값 교체
+        // 대신 삭제할 노드 removed를 찾는다. 
         removed = searchMinNode(target->right);
+        // removed의 값을 target으로 옮긴다.
         target->data = removed->data;
     }
 
-    /* successor 찾기 */
-    // successor : removed의 유일한 자식
-    if (removed->left != Nil)
-        successor = removed->left;
-    else
+    // 우리가 지우고 싶은 값(target)은 직접 삭제되지 않는다.
+    // 대신 다른 노드(removed)의 값을 가져와 덮어쓰고,
+    // 그 removed 노드를 실제로 삭제한다.
+
+    /* successor 찾고 연결하기 */
+    // successor 찾기 1 : 대부분 상황
+    if (removed->left == Nil)
         successor = removed->right;
+    // successor 찾기 2 : removed == target 인 경우
+    else if (removed->left != Nil)
+        successor = removed->left;
     
     /* successor를 removed의 부모와 연결하기 */
     successor->parent = removed->parent;
@@ -271,7 +283,9 @@ node    *removeNode(node **root, elementType data)
     else
         removed->parent->right = successor;
 
-    // RB 조건 검사
+    /* RB 조건 검사 */
+    // removed->color == black이면
+    // removed 제거 후 RBT 상 각 경로의 black 갯수가 안 맞음
     if (removed->color == BLACK)
         rebuildAfterRemove(root, successor);
     
@@ -286,7 +300,10 @@ void    rebuildAfterRemove(node **root, node *successor)
     {
         if (successor == successor->parent->left)
         {
+            // 형제를 설정
             sibling = successor->parent->right;
+
+            // 
             if (sibling->color == RED)
             {
                 sibling->color = BLACK;
