@@ -303,7 +303,7 @@ void    rebuildAfterRemove(node **root, node *successor)
             // successor의 형제(sibiling)를 설정
             sibling = successor->parent->right;
 
-            // sibiling == RED
+            // sibiling == RED : 정렬 작업
             if (sibling->color == RED)
             {
                 sibling->color = BLACK;
@@ -320,9 +320,9 @@ void    rebuildAfterRemove(node **root, node *successor)
                     sibling->color = RED;
                     successor = successor->parent;
                 }
-                // sibiling의 자식들 중 일부가 RED면
                 else
                 {
+                    // sibling의 왼쪽 자식 == Red면
                     if (sibling->left->color == RED)
                     {
                         sibling->left->color = BLACK;
@@ -331,7 +331,7 @@ void    rebuildAfterRemove(node **root, node *successor)
                         rotateRight(root, sibling);
                         sibling = successor->parent->right;
                     }
-
+                    // sibling의 오른쪽 자식 == Red면
                     sibling->color = successor->parent->color;
                     successor->parent->color = BLACK;
                     sibling->right->color = BLACK;
