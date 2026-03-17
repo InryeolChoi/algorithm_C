@@ -303,13 +303,14 @@ void    rebuildAfterRemove(node **root, node *successor)
             // 형제를 설정
             sibling = successor->parent->right;
 
-            // 
+            // 형재의 색 == RED
             if (sibling->color == RED)
             {
                 sibling->color = BLACK;
                 successor->parent->color = RED;
                 rotateLeft(root, successor->parent);
             }
+            // 형재의 색 == BLACK
             else
             {
                 if (sibling->left->color == BLACK &&
@@ -332,7 +333,7 @@ void    rebuildAfterRemove(node **root, node *successor)
                     sibling->color = successor->parent->color;
                     successor->parent->color = BLACK;
                     sibling->right->color = BLACK;
-                    roatetLeft(root, successor->parent);
+                    rotateLeft(root, successor->parent);
                     successor = (*root);
                 }
             }
