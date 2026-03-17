@@ -1,0 +1,83 @@
+# OS-generated files
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+.Spotlight-V100/
+.Trashes/
+Thumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+ehthumbs.db
+Icon?
+
+# Editor and IDE settings
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# Generic build directories
+build/
+Build/
+cmake-build-*/
+out/
+bin/
+lib/
+Debug/
+Release/
+debug/
+release/
+x64/
+x86/
+
+# C and C++ compiler outputs
+*.o
+*.obj
+*.lo
+*.la
+*.a
+*.lib
+*.so
+*.so.*
+*.dll
+*.dylib
+*.exe
+*.out
+*.app
+*.i
+*.ii
+*.s
+
+# Dependency and coverage files
+*.d
+*.gcno
+*.gcda
+*.gcov
+*.prof
+*.profraw
+*.profdata
+
+# Debug symbols and crash dumps
+*.pdb
+*.idb
+*.dSYM/
+*.stackdump
+core
+core.*
+
+# CMake, Autotools, and generated metadata
+CMakeCache.txt
+CMakeFiles/
+cmake_install.cmake
+compile_commands.json
+makedep*
+libtool
+aclocal.m4
+autom4te.cache/
+m4/
+
+# Optional local env files
+.env
+.env.*
