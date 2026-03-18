@@ -1,5 +1,7 @@
 #include "binarySearchTree.h"
 
+static BSTNode *removeNodeInternal(BSTNode **tree, ElementType target);
+
 BSTNode *createNode(ElementType newdata)
 {
     BSTNode *newnode = (BSTNode *)malloc(sizeof(BSTNode));
@@ -10,21 +12,17 @@ BSTNode *createNode(ElementType newdata)
     return newnode;
 }
 
-void        *destoryNode(BSTNode *node)
+void        destoryNode(BSTNode *node)
 {
     free(node);
 }
 
-void        *destoryTree(BSTNode *tree)
+void        destoryTree(BSTNode *tree)
 {
-    if (tree->right != NULL)
-        destoryNode(tree->right);
-    if (tree->left != NULL)
-        destoryNode(tree->left);
-    
-    tree->left = NULL;
-    tree->right = NULL;
-
+    if (tree == NULL)
+        return;
+    destoryTree(tree->left);
+    destoryTree(tree->right);
     destoryNode(tree);
 }
 
@@ -37,8 +35,7 @@ BSTNode     *searchNode(BSTNode *tree, ElementType target)
         return tree;
     else if (tree->data > target)
         return searchNode(tree->left, target);
-    else if (tree->data < target)
-        return searchNode(tree->right, target);
+    return searchNode(tree->right, target);
 }
 
 BSTNode     *searchMinNode(BSTNode *tree)
@@ -70,66 +67,45 @@ void        insertNode(BSTNode *tree, BSTNode *child)
     }
 }
 
-BSTNode     *removeNode(BSTNode *tree, BSTNode *parent, ElementType target)
+static BSTNode *removeNodeInternal(BSTNode **tree, ElementType target)
 {
-    BSTNode *removed = NULL;
+    BSTNode *removed;
+    BSTNode *child;
+    BSTNode *minNode;
 
-    if (tree == NULL)
+    if (*tree == NULL)
         return NULL;
-    
-    if (tree->data > target)
-        removed = removeNode(tree->left, tree, target);
-    else if (tree->data < target)
-        removed = removeNode(tree->right, tree, target);
+
+    if ((*tree)->data > target)
+        return removeNodeInternal(&(*tree)->left, target);
+    if ((*tree)->data < target)
+        return removeNodeInternal(&(*tree)->right, target);
+
+    removed = *tree;
+    if (removed->left == NULL && removed->right == NULL)
+        *tree = NULL;
+    else if (removed->left == NULL || removed->right == NULL)
+    {
+        child = removed->left != NULL ? removed->left : removed->right;
+        *tree = child;
+    }
     else
     {
-        removed = tree;
-
-        // 자식노드가 전부 없을 때
-        if (tree->left == NULL && tree->right == NULL)
-        {
-            // 부모 노드 끊기
-            if (parent->left == tree)
-                parent->left = NULL;
-            else
-                parent->right = NULL;
-        }
-
-        // 자식노드 있을 때
-        else
-        {
-            // 자식이 둘 있을 때
-            if (tree->left != NULL && tree->right != NULL)
-            {
-                // 오른쪽 subtree에서 가장 작은 노드 찾기
-                BSTNode *minNode = searchMinNode(tree->right);
-
-                // 그 노드를 삭제
-                minNode = removeNode(tree, NULL, minNode->data);
-
-                // 삭제할 노드의 data를 그 값으로 교체
-                tree->data = minNode->data;
-            }
-            // 자식이 하나만 있을 때
-            else
-            {
-                // 자식 가지고 오기
-                BSTNode *temp = NULL;
-                if (tree->left == NULL)
-                    temp = tree->right;
-                else
-                    temp = tree->right;
-                
-                // 조부모를 자식과 연결
-                if (parent->left == tree)
-                    parent->left = temp;
-                else
-                    parent->right = temp;
-            }
-        }
+        minNode = searchMinNode(removed->right);
+        removed->data = minNode->data;
+        return removeNodeInternal(&removed->right, minNode->data);
     }
-    
+
+    removed->left = NULL;
+    removed->right = NULL;
     return removed;
+}
+
+BSTNode     *removeNode(BSTNode **tree, ElementType target)
+{
+    if (tree == NULL)
+        return NULL;
+    return removeNodeInternal(tree, target);
 }
 
 void        InorderPrintTree(BSTNode *node)

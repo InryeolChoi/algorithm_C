@@ -1,16 +1,15 @@
 #include <stdlib.h>
 #include <stdio.h>
-#include <string.h>
+int ComparePoint(const void *num1, const void *num2)
+{
+    const int *elem1 = (const int *)num1;
+    const int *elem2 = (const int *)num2;
 
-int ComparePoint (const void *num1, const void *num2) {
-    int *elem1 = (int *)num1;
-    int *elem2 = (int *)num2;
-
-    if (elem1 > elem2) {
+    if (*elem1 > *elem2) {
         return 1;
     }
 
-    else if (elem1 < elem2) {
+    else if (*elem1 < *elem2) {
         return -1;
     }
 
@@ -21,7 +20,8 @@ int ComparePoint (const void *num1, const void *num2) {
     return 0;
 }
 
-int main() {
+int main()
+{
     int dataset[] = {5, 2, 9, 1, 5, 6};
     size_t dataset_size = sizeof(dataset) / sizeof(dataset[0]);
 

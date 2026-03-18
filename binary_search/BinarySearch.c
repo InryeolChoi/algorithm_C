@@ -27,12 +27,12 @@ Point *BinarySearch(Point pointList[], int size, double target)
 
 int comparePoint(const void *_elem1, const void *_elem2)
 {
-    Point *elem1 = (Point *)_elem1;
-    Point *elem2 = (Point *)_elem2;
+    const Point *elem1 = (const Point *)_elem1;
+    const Point *elem2 = (const Point *)_elem2;
 
     if (elem1->point > elem2->point)
         return 1;
-    else if (elem1->point > elem2->point)
+    else if (elem1->point < elem2->point)
         return -1;
     else
         return 0;
@@ -50,4 +50,5 @@ int main(void)
         printf("not found");
     else
         printf("found!\nID: %d, Point: %f \n", found->id, found->point);
+    return 0;
 }

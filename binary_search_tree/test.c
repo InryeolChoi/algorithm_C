@@ -29,7 +29,7 @@ int main()
     printf("\n");
 
     printf("removing 98...\n");
-    node = removeNode(tree, NULL, 98);
+    node = removeNode(&tree, 98);
     destoryNode(node);
 
     InorderPrintTree(tree);
@@ -41,4 +41,5 @@ int main()
     printf("\n");
 
     destoryTree(tree);
+    return 0;
 }

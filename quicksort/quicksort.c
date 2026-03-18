@@ -49,8 +49,9 @@ int main()
 {
     int data[] = {6, 4, 2, 3, 1, 5};
     int size = sizeof(data)/sizeof(data[0]);
-    insertsort(data, size);
+    quick_sort(data, 0, size - 1);
 
     for (int i = 0; i < size; i++)
         printf("%d : %d\n", i, data[i]);
+    return 0;
 }

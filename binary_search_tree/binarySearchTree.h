@@ -15,13 +15,13 @@ typedef struct TagBSTNode
 }   BSTNode;
 
 BSTNode     *createNode(ElementType newdata);
-void        *destoryNode(BSTNode *node);
-void        *destoryTree(BSTNode *tree);
+void        destoryNode(BSTNode *node);
+void        destoryTree(BSTNode *tree);
 
 BSTNode     *searchNode(BSTNode *tree, ElementType target);
 BSTNode     *searchMinNode(BSTNode *tree);
 void        insertNode(BSTNode *tree, BSTNode *child);
-BSTNode     *removeNode(BSTNode *tree, BSTNode *parent, ElementType target);
+BSTNode     *removeNode(BSTNode **tree, ElementType target);
 void        InorderPrintTree(BSTNode *node);
 
 #endif
